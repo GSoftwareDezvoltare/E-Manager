@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties> 
+	<entry key="adresaSQL">jdbc:mysql://localhost:3306/</entry>
+	<entry key="numeBD">aplicatie_licenta</entry>
+    <entry key="driverBD">com.mysql.jdbc.Driver</entry>
+	<entry key="username">Ovidiu</entry>
+</properties>
