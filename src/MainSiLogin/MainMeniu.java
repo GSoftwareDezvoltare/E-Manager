@@ -5,6 +5,7 @@
  */
 package MainSiLogin;
 
+import Antrenament.AdaugaAntrenament;
 import Grupe.AdaugaGrupa;
 import Jucator.AdaugaJucator;
 import Utilizatori.AdaugaUsers;
@@ -145,6 +146,11 @@ public class MainMeniu extends javax.swing.JFrame {
 
         jMenuAntrenamentAdauga.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
         jMenuAntrenamentAdauga.setText("Adauga");
+        jMenuAntrenamentAdauga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuAntrenamentAdaugaActionPerformed(evt);
+            }
+        });
         jMenuAntrenament.add(jMenuAntrenamentAdauga);
         jMenuAntrenament.add(jSeparator4);
 
@@ -217,6 +223,12 @@ public class MainMeniu extends javax.swing.JFrame {
         AdaugaGrupa ag = new AdaugaGrupa();
         ag.setVisible(true);
     }//GEN-LAST:event_jMenuGrupaAdaugaActionPerformed
+
+    private void jMenuAntrenamentAdaugaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAntrenamentAdaugaActionPerformed
+        // TODO add your handling code here:
+        AdaugaAntrenament aa = new AdaugaAntrenament();
+        aa.setVisible(true);
+    }//GEN-LAST:event_jMenuAntrenamentAdaugaActionPerformed
 
     private void privilegii_jucator(String adauga_jucator, String modifica_jucator){
         if(adauga_jucator.contentEquals("0")){
