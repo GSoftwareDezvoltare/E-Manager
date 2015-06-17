@@ -5,17 +5,28 @@
  */
 package Antrenament;
 
+import clase.DBConnection;
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
+
 /**
  *
  * @author TechSolutions
  */
 public class Pasul2 extends javax.swing.JFrame {
-
+    Connection connect = DBConnection.getDbCon().connect;
+    PreparedStatement ps = null;
+    static ResultSet rs = null;
     /**
      * Creates new form Pasul2
      */
     public Pasul2() {
         initComponents();
+        AdaugaEchipa();
     }
 
     /**
@@ -27,24 +38,52 @@ public class Pasul2 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtableEchipaAntrenament = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Aplicatie Manangement - Adauga Antrenament Pasul 2");
+
+        jtableEchipaAntrenament.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null}
+            },
+            new String [] {
+                "ID", "Nume", "Post"
+            }
+        ));
+        jScrollPane1.setViewportView(jtableEchipaAntrenament);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 199, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void AdaugaEchipa(){
+         try{
+             String 
+        String sql = "Select `j`.`id`, `j`.`nume`, `j`.`id_post`, `p`.`denumire`, from `jucator` `j` `posturi` `p` where `j`.`id_grupa` =  ";
+         PreparedStatement ps = connect.prepareStatement(sql);
+        rs = ps.executeQuery();
+        jtableEchipaAntrenament.setModel(DbUtils.resultSetToTableModel(rs)); 
+        }
+        catch(SQLException ExSQL){
+            JOptionPane.showMessageDialog(null, ExSQL);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -81,5 +120,7 @@ public class Pasul2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jtableEchipaAntrenament;
     // End of variables declaration//GEN-END:variables
 }
