@@ -94,6 +94,8 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 400, 250);
 
+        getAccessibleContext().setAccessibleDescription("");
+
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents

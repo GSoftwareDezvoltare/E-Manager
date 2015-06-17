@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Jucator;
+package Utilizatori;
 
 import clase.DBConnection;
 import clase.Users;
@@ -74,6 +74,7 @@ public class AdaugaUsers extends javax.swing.JFrame{
         jbtn_cancel_users = new javax.swing.JButton();
         jpf_parola = new javax.swing.JPasswordField();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Aplicatie Management - Adauga Utilizator");
         setMinimumSize(new java.awt.Dimension(699, 382));
 

@@ -5,9 +5,11 @@
  */
 package MainSiLogin;
 
+import Grupe.AdaugaGrupa;
 import Jucator.AdaugaJucator;
-import Jucator.AdaugaUsers;
+import Utilizatori.AdaugaUsers;
 import Jucator.ModificaJucator;
+import Utilizatori.ModificaUtilizatori;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -125,6 +127,11 @@ public class MainMeniu extends javax.swing.JFrame {
 
         jMenuGrupaAdauga.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, 0));
         jMenuGrupaAdauga.setText("Adauga");
+        jMenuGrupaAdauga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuGrupaAdaugaActionPerformed(evt);
+            }
+        });
         jMenuGrupa.add(jMenuGrupaAdauga);
         jMenuGrupa.add(jSeparator3);
 
@@ -186,6 +193,13 @@ public class MainMeniu extends javax.swing.JFrame {
 
     private void jMenuAntrenorModificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAntrenorModificaActionPerformed
         // TODO add your handling code here:
+        ModificaUtilizatori mu;
+        try {
+            mu = new ModificaUtilizatori();
+            mu.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MainMeniu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuAntrenorModificaActionPerformed
 
     private void jMenuAntrenamentModificaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAntrenamentModificaActionPerformed
@@ -197,6 +211,12 @@ public class MainMeniu extends javax.swing.JFrame {
         AdaugaUsers au = new AdaugaUsers();
         au.setVisible(true);
     }//GEN-LAST:event_jMenuAntrenorAdaugaActionPerformed
+
+    private void jMenuGrupaAdaugaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuGrupaAdaugaActionPerformed
+        // TODO add your handling code here:
+        AdaugaGrupa ag = new AdaugaGrupa();
+        ag.setVisible(true);
+    }//GEN-LAST:event_jMenuGrupaAdaugaActionPerformed
 
     private void privilegii_jucator(String adauga_jucator, String modifica_jucator){
         if(adauga_jucator.contentEquals("0")){
@@ -287,9 +307,7 @@ public class MainMeniu extends javax.swing.JFrame {
         }
         
     }
-    
-    
-    
+
     /**
      * @param args the command line arguments
      */
