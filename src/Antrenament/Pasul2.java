@@ -5,11 +5,13 @@
  */
 package Antrenament;
 
+import static Antrenament.Pasul3.rs;
 import clase.DBConnection;
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 
@@ -18,6 +20,8 @@ import net.proteanit.sql.DbUtils;
  * @author TechSolutions
  */
 public class Pasul2 extends javax.swing.JFrame {
+
+    
     Connection connect = DBConnection.getDbCon().connect;
     PreparedStatement ps = null;
     static ResultSet rs = null;
@@ -26,7 +30,7 @@ public class Pasul2 extends javax.swing.JFrame {
      */
     public Pasul2() {
         initComponents();
-        AdaugaEchipa();
+        PopuleazaLista();
     }
 
     /**
@@ -38,51 +42,137 @@ public class Pasul2 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtableEchipaAntrenament = new javax.swing.JTable();
+        jListAntrenamente = new javax.swing.JList();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListaSubAntrenamente = new javax.swing.JList();
+        jbtnAdaugaInLista = new javax.swing.JButton();
+        jbtnMutaInPrimaLista = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jbtnInapoi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Aplicatie Manangement - Adauga Antrenament Pasul 2");
+        setTitle("Aplicatie Management - Pasul 2");
 
-        jtableEchipaAntrenament.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null}
-            },
-            new String [] {
-                "ID", "Nume", "Post"
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Selecteaza antrenamentele exersate"));
+
+        jScrollPane1.setViewportView(jListAntrenamente);
+
+        jScrollPane2.setViewportView(jListaSubAntrenamente);
+
+        jbtnAdaugaInLista.setText(">>");
+
+        jbtnMutaInPrimaLista.setText("<<");
+
+        jButton1.setText("AdaugaNote");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jtableEchipaAntrenament);
+        });
+
+        jbtnInapoi.setText("Inapoi");
+        jbtnInapoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnInapoiActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbtnAdaugaInLista)
+                            .addComponent(jbtnMutaInPrimaLista))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jbtnInapoi)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(24, 24, 24))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jbtnAdaugaInLista)
+                        .addGap(42, 42, 42)
+                        .addComponent(jbtnMutaInPrimaLista))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jbtnInapoi)))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 199, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jbtnInapoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnInapoiActionPerformed
+        // TODO add your handling code here:
+        AdaugaAntrenament aa = new AdaugaAntrenament();
+        aa.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jbtnInapoiActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Pasul3 p3 = new Pasul3();
+        p3.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     
-    private void AdaugaEchipa(){
-         try{
-             String 
-        String sql = "Select `j`.`id`, `j`.`nume`, `j`.`id_post`, `p`.`denumire`, from `jucator` `j` `posturi` `p` where `j`.`id_grupa` =  ";
-         PreparedStatement ps = connect.prepareStatement(sql);
+    private void PopuleazaLista(){
+        DefaultListModel m = new DefaultListModel();
+        try{
+            String sql = "Select sa.denumire from subantrenamente sa left join denumireantrenamente da on da.id =sa.id  where sa.categorie_antrenament=?";
+             PreparedStatement ps = connect.prepareStatement(sql);
+         ps.setInt(1, AdaugaAntrenament.jcbxSelectAntrenament.getSelectedIndex());
         rs = ps.executeQuery();
-        jtableEchipaAntrenament.setModel(DbUtils.resultSetToTableModel(rs)); 
+        while(rs.next()){
+            String denumire = rs.getString("denumire");
+            m.addElement(denumire);
+        }
+        jListAntrenamente.setModel(m);
         }
         catch(SQLException ExSQL){
             JOptionPane.showMessageDialog(null, ExSQL);
-        }
+        } 
     }
     /**
      * @param args the command line arguments
@@ -120,7 +210,14 @@ public class Pasul2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JList jListAntrenamente;
+    private javax.swing.JList jListaSubAntrenamente;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jtableEchipaAntrenament;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton jbtnAdaugaInLista;
+    private javax.swing.JButton jbtnInapoi;
+    private javax.swing.JButton jbtnMutaInPrimaLista;
     // End of variables declaration//GEN-END:variables
 }

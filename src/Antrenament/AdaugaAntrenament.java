@@ -5,17 +5,28 @@
  */
 package Antrenament;
 
+import clase.DBConnection;
+import com.mysql.jdbc.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author TechSolutions
  */
 public class AdaugaAntrenament extends javax.swing.JFrame {
-
+    Connection connect = DBConnection.getDbCon().connect;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
     /**
      * Creates new form AdaugaAntrenament
      */
     public AdaugaAntrenament() {
         initComponents();
+        PopuleazaGrupa();
+        PopuleazaAntrenament();
     }
 
     /**
@@ -38,7 +49,7 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Antrenament"));
 
-        jcbxGrupa.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Alege Grupa" }));
+        jcbxGrupa.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecteaza Grupa" }));
         jcbxGrupa.setToolTipText("");
 
         jcbxSelectAntrenament.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecteaza Antrenament" }));
@@ -111,10 +122,55 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void PopuleazaAntrenament(){
+        try{
+        String sql = "Select * from denumireantrenamente";
+        ps = connect.prepareStatement(sql);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                int id = rs.getInt("id");
+                String denumire =rs.getString("denumire");
+                jcbxSelectAntrenament.insertItemAt(denumire, id);
+                }
+        }
+        catch(SQLException ex1){
+            JOptionPane.showMessageDialog(null, ex1);
+        }
+    }
+    
+    
+    private void PopuleazaGrupa(){
+         try{
+            
+            String sql = "Select `u`.`grupa`,`g`.`denumire` from `utilizatori` `u` LEFT JOIN grupe g on g.id_grupa=u.grupa where utilizator='Ovidiu'";
+            ps=connect.prepareStatement(sql);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                
+                int id = rs.getInt("grupa");
+                String denumire =rs.getString("denumire");
+                jcbxGrupa.insertItemAt(denumire, id);
+                
+            }
+        }
+        catch(Exception exip){
+            JOptionPane.showMessageDialog(null, exip);
+        }
+    }
     private void jbtnPasul2_AdaugaAntrenamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPasul2_AdaugaAntrenamentActionPerformed
         // TODO add your handling code here:
+        if(jcbxGrupa.getSelectedIndex() == 0){
+            JOptionPane.showMessageDialog(null, "Va rugam sa selectati grupa dorit");
+        }
+        else if(jcbxSelectAntrenament.getSelectedIndex() == 0){
+            JOptionPane.showMessageDialog(null, "Va rugam sa selectati antrenamentul dorit");
+        }
+        else{
         Pasul2 p2 = new Pasul2();
         p2.setVisible(true);
+        setVisible(false);
+        }
+        
     }//GEN-LAST:event_jbtnPasul2_AdaugaAntrenamentActionPerformed
 
     private void jbtnAnuleaza_AdaugaAntrenamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAnuleaza_AdaugaAntrenamentActionPerformed
@@ -161,7 +217,7 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbtnAnuleaza_AdaugaAntrenament;
     private javax.swing.JButton jbtnPasul2_AdaugaAntrenament;
-    private javax.swing.JComboBox jcbxGrupa;
-    private javax.swing.JComboBox jcbxSelectAntrenament;
+    public static javax.swing.JComboBox jcbxGrupa;
+    public static javax.swing.JComboBox jcbxSelectAntrenament;
     // End of variables declaration//GEN-END:variables
 }
