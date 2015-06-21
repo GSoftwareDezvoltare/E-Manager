@@ -30,7 +30,7 @@ public class Pasul2 extends javax.swing.JFrame {
      */
     public Pasul2() {
         initComponents();
-        PopuleazaLista();
+       // PopuleazaLista();
     }
 
     /**
@@ -157,7 +157,7 @@ public class Pasul2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     
-    private void PopuleazaLista(){
+    /*private void PopuleazaLista(){
         DefaultListModel m = new DefaultListModel();
         try{
             String sql = "Select sa.denumire from subantrenamente sa left join denumireantrenamente da on da.id =sa.id  where sa.categorie_antrenament=?";
@@ -173,7 +173,7 @@ public class Pasul2 extends javax.swing.JFrame {
         catch(SQLException ExSQL){
             JOptionPane.showMessageDialog(null, ExSQL);
         } 
-    }
+    }*/
     /**
      * @param args the command line arguments
      */
