@@ -11,9 +11,22 @@ import Jucator.AdaugaJucator;
 import Utilizatori.AdaugaUsers;
 import Jucator.ModificaJucator;
 import Utilizatori.ModificaUtilizatori;
+import clase.DBConnection;
+import com.mysql.jdbc.Connection;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -21,9 +34,10 @@ import java.util.logging.Logger;
  */
 public class MainMeniu extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainMeniu
-     */
+    Connection connect = DBConnection.getDbCon().connect;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    
     public MainMeniu() throws SQLException {
         initComponents();
         String adauga_jucator = Login.rs.getString("adauga_jucator");
@@ -44,8 +58,58 @@ public class MainMeniu extends javax.swing.JFrame {
         
         String setari = Login.rs.getString("setari");
         privilegii_setari(setari);
+        
+        CompletareDate();
+        
+        PopuleazaTabela();
+        AfisarePoza();
     }
+    
+    private void AfisarePoza() throws SQLException{
+        String name = Login.rs.getString("prenume") ;
+        ImageIcon icon =new ImageIcon("lib\\poze\\" + name + ".jpg");
+            jPoza.setPreferredSize(new Dimension(144,121));
+            jPoza.setIcon(icon);
+        
+    }
+    
+    
+    private void PopuleazaTabela() throws SQLException{
+        int id_grupa = Login.rs.getInt("grupa");
+        String sql = "Select `j`.`id`, `j`.`nume`, j.prenume, `p`.`denumire` from `jucator` `j` left join `posturi` `p` ON `p`.`id_post` = `j`.`id_post` where `j`.`id_grupa`='" + id_grupa + "'";
+        PreparedStatement ps = connect.prepareStatement(sql);
+        rs = ps.executeQuery();
+            jTabelaEchipa_MainMeniu.setModel(DbUtils.resultSetToTableModel(rs));
+    }
+    private void PreluareEchipa(){
+        try{
+            int id_grupa = Login.rs.getInt("grupa");
+            String sql="Select denumire from grupe where id_grupa = '"+id_grupa+"'";
+            ps=connect.prepareStatement(sql);
+            rs=ps.executeQuery();
+            while(rs.next())
+            {
+                String denumire =rs.getString("denumire");
+                jtfEchipa_MainMeniu.setText(denumire);
+            }
+        }
+       
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+    }
+    private void CompletareDate() throws SQLException{
+        String nume = Login.rs.getString("nume");
+        jtfNume_MAINMENIU.setText(nume);
+        
+        String prenume = Login.rs.getString("prenume");
+        jtfPrenume_MAINMENIU.setText(prenume);
 
+        PreluareEchipa();
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,6 +119,16 @@ public class MainMeniu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator5 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
+        jtfNume_MAINMENIU = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jtfPrenume_MAINMENIU = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jtfEchipa_MainMeniu = new javax.swing.JTextField();
+        jPoza = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTabelaEchipa_MainMeniu = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuJucator = new javax.swing.JMenu();
         jMenuJucatorAdauga = new javax.swing.JMenuItem();
@@ -77,6 +151,55 @@ public class MainMeniu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Aplicatie Management - MainMeniu");
         setMinimumSize(new java.awt.Dimension(700, 500));
+
+        jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jLabel1.setText("Nume:");
+
+        jtfNume_MAINMENIU.setEditable(false);
+
+        jLabel2.setText("Prenume:");
+
+        jtfPrenume_MAINMENIU.setEditable(false);
+
+        jLabel3.setText("Echipa:");
+
+        jtfEchipa_MainMeniu.setEditable(false);
+
+        jPoza.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resurse/Login-2.jpg"))); // NOI18N
+        jPoza.setMaximumSize(new java.awt.Dimension(144, 121));
+        jPoza.setMinimumSize(new java.awt.Dimension(144, 121));
+        jPoza.setPreferredSize(new java.awt.Dimension(144, 121));
+
+        jTabelaEchipa_MainMeniu.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jTabelaEchipa_MainMeniu.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Nume", "Prenume", "Post", "APT"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTabelaEchipa_MainMeniu.setEnabled(false);
+        jTabelaEchipa_MainMeniu.setFillsViewportHeight(true);
+        jTabelaEchipa_MainMeniu.setFocusable(false);
+        jTabelaEchipa_MainMeniu.setGridColor(new java.awt.Color(153, 153, 153));
+        jTabelaEchipa_MainMeniu.setOpaque(false);
+        jTabelaEchipa_MainMeniu.setRequestFocusEnabled(false);
+        jTabelaEchipa_MainMeniu.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        jTabelaEchipa_MainMeniu.setShowVerticalLines(false);
+        jScrollPane1.setViewportView(jTabelaEchipa_MainMeniu);
 
         jMenuJucator.setText("Jucator");
 
@@ -174,11 +297,50 @@ public class MainMeniu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jtfNume_MAINMENIU)
+                            .addComponent(jtfPrenume_MAINMENIU)
+                            .addComponent(jtfEchipa_MainMeniu, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jPoza, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 479, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPoza, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jtfNume_MAINMENIU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jtfPrenume_MAINMENIU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jtfEchipa_MainMeniu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jSeparator5)
         );
 
         pack();
@@ -360,6 +522,9 @@ public class MainMeniu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenuAntrenament;
     private javax.swing.JMenuItem jMenuAntrenamentAdauga;
     private javax.swing.JMenuItem jMenuAntrenamentModifica;
@@ -374,9 +539,18 @@ public class MainMeniu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuJucatorAdauga;
     private javax.swing.JMenuItem jMenuJucatorModifica;
     private javax.swing.JMenu jMenuSetari;
+    private javax.swing.JLabel jPoza;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JTable jTabelaEchipa_MainMeniu;
+    private javax.swing.JTextField jtfEchipa_MainMeniu;
+    private javax.swing.JTextField jtfNume_MAINMENIU;
+    private javax.swing.JTextField jtfPrenume_MAINMENIU;
     // End of variables declaration//GEN-END:variables
+
+    
 }

@@ -5,6 +5,7 @@
  */
 package Antrenament;
 
+import MainSiLogin.Login;
 import clase.DBConnection;
 import com.mysql.jdbc.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +16,8 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -28,17 +31,19 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
 
     Connection connect = DBConnection.getDbCon().connect;
     PreparedStatement ps = null;
-    ResultSet rs = null;
+    static ResultSet rs = null;
+    static ResultSet rs2 = null;
+    static int id_grupa = 0;
     DefaultListModel m = new DefaultListModel();
 
     /**
      * Creates new form AdaugaAntrenament
      */
-    public AdaugaAntrenament() {
+    public AdaugaAntrenament(){
         initComponents();
         PopuleazaGrupa();
-        //PopuleazaAntrenamentBaza();
         PopuleazaArbore();
+        afisareIDGrupa();
     }
 
     /**
@@ -54,7 +59,6 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
         jcbxGrupa = new javax.swing.JComboBox();
         jbtnPasul2_AdaugaAntrenament = new javax.swing.JButton();
         jbtnAnuleaza_AdaugaAntrenament = new javax.swing.JButton();
-        jcbxSelecteazaLVL1 = new javax.swing.JComboBox();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
 
@@ -63,7 +67,6 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Antrenament"));
 
-        jcbxGrupa.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecteaza Grupa" }));
         jcbxGrupa.setToolTipText("");
 
         jbtnPasul2_AdaugaAntrenament.setText("Pasul 2");
@@ -80,13 +83,6 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
             }
         });
 
-        jcbxSelecteazaLVL1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Alege Antrenament Baza" }));
-        jcbxSelecteazaLVL1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jcbxSelecteazaLVL1ItemStateChanged(evt);
-            }
-        });
-
         jTree1.setBorder(javax.swing.BorderFactory.createTitledBorder("Antrenamente de baza"));
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
@@ -100,12 +96,11 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
-                    .addComponent(jcbxGrupa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jcbxSelecteazaLVL1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jcbxGrupa, 0, 348, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jbtnPasul2_AdaugaAntrenament)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 204, Short.MAX_VALUE)
-                        .addComponent(jbtnAnuleaza_AdaugaAntrenament)))
+                        .addComponent(jbtnAnuleaza_AdaugaAntrenament)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbtnPasul2_AdaugaAntrenament)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -113,10 +108,8 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jcbxGrupa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jcbxSelecteazaLVL1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnPasul2_AdaugaAntrenament)
@@ -145,27 +138,11 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    //inserez in combobox
-    private void PopuleazaAntrenamentBaza() {
-        try {
-            String sql = "Select * from antrenament_categorii";
-            ps = connect.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String denumire = rs.getString("denumire");
-                jcbxSelecteazaLVL1.insertItemAt(denumire, id);
-            }
-        } catch (SQLException ex1) {
-            JOptionPane.showMessageDialog(null, ex1);
-        }
-    }
-
     private void PopuleazaArbore() {
         try {
             ArrayList lista_antrenamente = new ArrayList();
             lista_antrenamente.add("Lista Antrenamente");
-            String sql = "Select * from antrenament_categorii";
+            String sql = "SELECT * FROM antrenament_categorii";
             ps = connect.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -228,13 +205,13 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
 
                 for (Map.Entry<String, DefaultMutableTreeNode> entryGrandNode : mapOfChildNodes.entrySet()) {
                     String sql3 = "Select denumire from antrenamente_subcategoriicopil where id='" + entryGrandNode.getKey() + "'";
-                    
+
                     ps = connect.prepareStatement(sql3);
                     ResultSet rs3 = ps.executeQuery();
                     while (rs3.next()) {
                         child2 = new DefaultMutableTreeNode(rs3.getString("denumire"));
                         if (entryGrandNode.getValue() != null) {
-                            System.out.println("Parent = " + entryGrandNode.getValue().toString() +" child = " + child2.toString());
+                            System.out.println("Parent = " + entryGrandNode.getValue().toString() + " child = " + child2.toString());
                             entryGrandNode.getValue().add(child2);
                         }
                     }
@@ -250,60 +227,57 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
         return result;
     }
 
-    private void AccesAntrenament() {
-        if (jcbxSelecteazaLVL1.getSelectedIndex() == 1) {
-            PopuleazaArbore();
-        }
-        /*}
-         else if(jcbxSelecteazaLVL1.getSelectedIndex() == 2){
-         PopuleazaArbore();
-         }
-         else
-         {
-         }*/
-    }
-
     private void PopuleazaGrupa() {
         try {
-
-            String sql = "Select `u`.`grupa`,`g`.`denumire` from `utilizatori` `u` LEFT JOIN grupe g on g.id_grupa=u.grupa where utilizator='Ovidiu'";
+            String utilizator = Login.rs.getString("utilizator");
+            String sql = "Select `u`.`grupa`,`g`.`denumire` from `utilizatori` `u` LEFT JOIN grupe g on g.id_grupa=u.grupa where utilizator='" + utilizator + "'";
+            System.out.println(sql);
             ps = connect.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-
-                int id = rs.getInt("grupa");
                 String denumire = rs.getString("denumire");
-                jcbxGrupa.insertItemAt(denumire, id);
-
+                jcbxGrupa.addItem(denumire);
             }
-        } catch (Exception exip) {
+
+        } catch (SQLException exip) {
             JOptionPane.showMessageDialog(null, exip);
         }
     }
+
+    private void afisareIDGrupa() {
+        String sql2 = "Select id_grupa from grupe where denumire=?";
+        try {
+        ps = connect.prepareStatement(sql2);
+        String denumire = jcbxGrupa.getSelectedItem().toString();
+        ps.setString(1, denumire);
+        rs2 = ps.executeQuery();
+        while (rs2.next()) {
+        id_grupa = rs2.getInt("id_grupa");
+         
+       }
+        } catch (SQLException ex) {
+            Logger.getLogger(Pasul2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+
     private void jbtnPasul2_AdaugaAntrenamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnPasul2_AdaugaAntrenamentActionPerformed
-        // TODO add your handling code here:
-        if (jcbxGrupa.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Va rugam sa selectati grupa dorit");
-        } //  else if(jcbxSelectAntrenament.getSelectedIndex() == 0){
-        //     JOptionPane.showMessageDialog(null, "Va rugam sa selectati antrenamentul dorit");
-        //}
-        else {
-            Pasul2 p2 = new Pasul2();
+            Pasul2 p2;
+        try {
+            p2 = new Pasul2();
+        
             p2.setVisible(true);
             setVisible(false);
+            } catch (SQLException ex) {
+            Logger.getLogger(AdaugaAntrenament.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }//GEN-LAST:event_jbtnPasul2_AdaugaAntrenamentActionPerformed
 
     private void jbtnAnuleaza_AdaugaAntrenamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAnuleaza_AdaugaAntrenamentActionPerformed
         // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_jbtnAnuleaza_AdaugaAntrenamentActionPerformed
-
-    private void jcbxSelecteazaLVL1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbxSelecteazaLVL1ItemStateChanged
-        // TODO add your handling code here:
-        AccesAntrenament();
-    }//GEN-LAST:event_jcbxSelecteazaLVL1ItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -335,7 +309,8 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AdaugaAntrenament().setVisible(true);
+                    new AdaugaAntrenament().setVisible(true);
+               
             }
         });
     }
@@ -347,7 +322,6 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
     private javax.swing.JButton jbtnAnuleaza_AdaugaAntrenament;
     private javax.swing.JButton jbtnPasul2_AdaugaAntrenament;
     public static javax.swing.JComboBox jcbxGrupa;
-    private javax.swing.JComboBox jcbxSelecteazaLVL1;
     // End of variables declaration//GEN-END:variables
 
 }

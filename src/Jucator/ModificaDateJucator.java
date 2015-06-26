@@ -7,7 +7,7 @@ package Jucator;
 
 
 
-import static Jucator.ModificaJucator.jcbModificaJucator;
+import static Jucator.ModificaJucator.jTableAfisareJucatori;
 import clase.DBConnection;
 import clase.Jucator;
 import com.mysql.jdbc.Connection;
@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -36,11 +37,13 @@ public class ModificaDateJucator extends javax.swing.JFrame {
     }
     
     private void InserareDateJucator(){
-       int id_jucator = jcbModificaJucator.getSelectedIndex();
+        int row = jTableAfisareJucatori.getSelectedRow();
+        String id_jucator =  (jTableAfisareJucatori.getModel().getValueAt(row,0).toString());
+        System.out.println(id_jucator);
         try{
             String sql = "Select * from jucator where id=?";
         ps = connect.prepareStatement(sql);
-        ps.setInt(1, id_jucator);
+        ps.setString(1, id_jucator);
         rs = ps.executeQuery();
         while(rs.next()){
             String nume = rs.getString("nume");
@@ -65,7 +68,6 @@ public class ModificaDateJucator extends javax.swing.JFrame {
             jtfnumemama.setText(nume_mama);
             InserareGrupa();
             InserarePostActual();
-            jcbModificaJucator.setSelectedIndex(1);
             InserarePost();
         }
         
@@ -77,11 +79,12 @@ public class ModificaDateJucator extends javax.swing.JFrame {
     }
     
     private void InserareGrupa(){
-          int id_jucator = jcbModificaJucator.getSelectedIndex();
+        int row = jTableAfisareJucatori.getSelectedRow();
+        String id_jucator =  (jTableAfisareJucatori.getModel().getValueAt(row,0).toString());
         try{
             String sql="Select j.id, g.id_grupa, g.denumire from jucator j, grupe g where j.id =? and j.id_grupa = g.id_grupa;";
             ps=connect.prepareStatement(sql);
-            ps.setInt(1, id_jucator);
+            ps.setString(1, id_jucator);
             rs=ps.executeQuery();
             while(rs.next())
             {
@@ -97,28 +100,28 @@ public class ModificaDateJucator extends javax.swing.JFrame {
     };
     
     private void InserarePostActual(){
-        int id_jucator = jcbModificaJucator.getSelectedIndex();
+       int row = jTableAfisareJucatori.getSelectedRow();
+        String id_jucator =  (jTableAfisareJucatori.getModel().getValueAt(row,0).toString());
         try{
             String sql = "select j.id, p.id_post, p.denumire from jucator j, posturi p where j.id =? and j.id_post = p.id_post;";
             ps=connect.prepareStatement(sql);
-            ps.setInt(1, id_jucator);
+            ps.setString(1, id_jucator);
             rs=ps.executeQuery();
             while(rs.next()){
                 String denumire =rs.getString("denumire");
                 jcbpost.addItem(denumire);
+                System.out.println(denumire);
             }
         }
-        catch(Exception exip){
+        catch(SQLException exip){
             JOptionPane.showMessageDialog(null, exip);
         }
     }
     
     private void InserarePost(){
-        int id_jucator = jcbModificaJucator.getSelectedIndex();
         try{
-            String sql = "Select * from posutri";
+            String sql = "Select * from posturi";
             ps=connect.prepareStatement(sql);
-            ps.setInt(1, id_jucator);
             rs=ps.executeQuery();
             while(rs.next()){
                 int id_post = rs.getInt("id_post");

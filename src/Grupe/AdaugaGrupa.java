@@ -8,7 +8,6 @@ package Grupe;
 import clase.DBConnection;
 import clase.Grupe;
 import com.mysql.jdbc.Connection;
-import com.sun.java.swing.plaf.windows.resources.windows;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,11 +35,13 @@ public class AdaugaGrupa extends javax.swing.JFrame {
     }
 
     private void AdaugaGrupa(){
+        String denumire_grupa = grupa.getDenumire();
         String sql = "Insert into grupe(denumire) VALUES (?)";
             try {
                 PreparedStatement ps = connect.prepareStatement(sql);
-                ps.setString(1, grupa.getDenumire());
+                ps.setString(1, denumire_grupa);
                 ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Grupa " + denumire_grupa + " S-a adaugat cu succes!");
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
@@ -88,14 +89,14 @@ public class AdaugaGrupa extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jbtnAdauga_AdaugaGrupa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jbtnCancel_AdaugaGrupa))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jtfNumeGrupa, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 19, Short.MAX_VALUE)))
+                        .addGap(0, 19, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jbtnCancel_AdaugaGrupa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jbtnAdauga_AdaugaGrupa)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(

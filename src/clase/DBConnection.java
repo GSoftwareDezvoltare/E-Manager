@@ -18,7 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import static sun.security.jgss.GSSUtil.login;
 
 
 /**
@@ -31,14 +30,15 @@ public final class DBConnection{
     public Connection connect;
     public static DBConnection db;
     
-    private DBConnection() throws FileNotFoundException{
+    
+    private DBConnection() throws FileNotFoundException, ClassNotFoundException{
+       File fisier = new File("local.xml");
         
-        File file = new File("local.xml");
-        if(file.isHidden()){
+        if(fisier.isHidden()){
         try{
             Properties props = new Properties();
-           InputStream fisier = new FileInputStream("local.xml");
-            props.loadFromXML(fisier);
+            InputStream file_configuration = new FileInputStream("local.xml");
+            props.loadFromXML(file_configuration);
             String url = props.getProperty("adresaSQL");
             String dbName = props.getProperty("numeBD");
             String driver = props.getProperty("driverBD");
@@ -50,8 +50,12 @@ public final class DBConnection{
                 this.connect = (Connection)DriverManager.getConnection(url+dbName,userName,password);
                 
             }
-            catch(Exception e){
+            catch(SQLException e){
                 e.printStackTrace();
+            } catch (InstantiationException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
                 catch(IOException ex){
@@ -60,7 +64,9 @@ public final class DBConnection{
         
         }
         else{
-                System.out.println("Fisierul nu este ascuns!");
+                
+                    Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, "Conectiunea cu bd nu s-a realizat!");
+                
                 }
        
     }
@@ -69,6 +75,8 @@ public final class DBConnection{
             try {
                 db = new DBConnection();
             } catch (FileNotFoundException ex) {
+                Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(DBConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

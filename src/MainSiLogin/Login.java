@@ -8,11 +8,14 @@ package MainSiLogin;
 import clase.DBConnection;
 import clase.criptare;
 import com.mysql.jdbc.Connection;
+import java.awt.Insets;
+import java.awt.Window;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.Normalizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -22,9 +25,10 @@ import javax.swing.JOptionPane;
  * @author TechSolutions
  */
 public class Login extends javax.swing.JFrame {
-    Connection connect = DBConnection.getDbCon().connect;
+   Connection connect = DBConnection.getDbCon().connect;
     PreparedStatement ps = null;
-    static ResultSet rs = null;
+    public static ResultSet rs = null;
+    
     /**
      * Creates new form Login
      */
@@ -51,16 +55,16 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Aplicatie Management - Login");
         setFocusCycleRoot(false);
-        setMaximumSize(new java.awt.Dimension(405, 277));
-        setMinimumSize(new java.awt.Dimension(405, 277));
-        setPreferredSize(new java.awt.Dimension(405, 277));
+        setMaximumSize(new java.awt.Dimension(400, 251));
+        setMinimumSize(new java.awt.Dimension(400, 251));
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(400, 251));
         setResizable(false);
-        getContentPane().setLayout(null);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jusername.setMaximumSize(new java.awt.Dimension(5, 20));
         jusername.setMinimumSize(new java.awt.Dimension(5, 20));
-        getContentPane().add(jusername);
-        jusername.setBounds(190, 100, 180, 30);
+        getContentPane().add(jusername, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 180, 30));
 
         jpassword.setMaximumSize(new java.awt.Dimension(5, 20));
         jpassword.setMinimumSize(new java.awt.Dimension(5, 20));
@@ -70,8 +74,7 @@ public class Login extends javax.swing.JFrame {
                 jpasswordActionPerformed(evt);
             }
         });
-        getContentPane().add(jpassword);
-        jpassword.setBounds(190, 160, 180, 30);
+        getContentPane().add(jpassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 180, 30));
 
         jButton1.setText("Login");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -79,8 +82,7 @@ public class Login extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(180, 200, 100, 23);
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 200, 100, -1));
 
         jButton2.setText("Exit");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -88,12 +90,16 @@ public class Login extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2);
-        jButton2.setBounds(290, 200, 100, 23);
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 200, 100, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("E:\\Lucrare Licenta\\AplicatieSuportPentruManagerulJucatorilor\\Login-2.jpg")); // NOI18N
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 400, 250);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resurse/Login-2.jpg"))); // NOI18N
+        jLabel1.setLabelFor(this);
+        jLabel1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jLabel1.setFocusable(false);
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel1.setInheritsPopupMenu(false);
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         getAccessibleContext().setAccessibleDescription("");
 
@@ -103,7 +109,7 @@ public class Login extends javax.swing.JFrame {
 
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String Sql = "SELECT `f`.`denumire`, `f`.`adauga_jucator`, `f`.`modifica_jucator`,`f`.`adauga_antrenor`, `f`.`modifica_antrenor`, `f`.`adauga_grupa`,`f`.`modifica_grupa`, `f`.`adauga_antrenament`, `f`.`modifica_antrenament`, `f`.`setari`" +
+        String Sql = "SELECT `u`.utilizator, u.nume, u.prenume, u.grupa, `f`.`denumire`, `f`.`adauga_jucator`, `f`.`modifica_jucator`,`f`.`adauga_antrenor`, `f`.`modifica_antrenor`, `f`.`adauga_grupa`,`f`.`modifica_grupa`, `f`.`adauga_antrenament`, `f`.`modifica_antrenament`, `f`.`setari`" +
                 "  FROM `functie` `f` LEFT JOIN `utilizatori` `u` ON `f`.`id`=`u`.`functie` WHERE `u`.`utilizator`=? AND `u`.`parola`=?;";
         try{
             PreparedStatement ps = connect.prepareStatement(Sql);
@@ -136,6 +142,7 @@ public class Login extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         System.exit(0);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jpasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jpasswordActionPerformed

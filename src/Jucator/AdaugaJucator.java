@@ -308,6 +308,7 @@ public class AdaugaJucator extends javax.swing.JFrame {
 
             //apelare metoda insertbd
             InserareJucator();
+            JOptionPane.showMessageDialog(null, "Jucatorul " + jucator.getNume() + " " + jucator.getPrenume() + " S-a adaugat cu succes in baza de date!");
             setVisible(false);
         }
     }//GEN-LAST:event_jbtnAdaugaJucatorActionPerformed
