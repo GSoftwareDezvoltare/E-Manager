@@ -43,7 +43,7 @@ public final class DBConnection{
             String dbName = props.getProperty("numeBD");
             String driver = props.getProperty("driverBD");
             String userName = props.getProperty("username");
-            String password = "fg2358ij90M#";
+            String password = "frac2009M#";
             
             try{
                 Class.forName(driver).newInstance();

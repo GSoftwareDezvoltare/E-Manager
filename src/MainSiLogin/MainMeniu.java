@@ -343,6 +343,8 @@ public class MainMeniu extends javax.swing.JFrame {
             .addComponent(jSeparator5)
         );
 
+        getAccessibleContext().setAccessibleName("E-Management - MainMeniu");
+
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents

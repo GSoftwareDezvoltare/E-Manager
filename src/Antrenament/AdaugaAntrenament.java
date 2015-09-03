@@ -63,7 +63,7 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
         jTree1 = new javax.swing.JTree();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Aplicatie Management - Adauga Antrenament");
+        setTitle("E-Management - Adauga Antrenament");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Antrenament"));
 
@@ -133,6 +133,8 @@ public class AdaugaAntrenament extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        getAccessibleContext().setAccessibleDescription("");
 
         pack();
         setLocationRelativeTo(null);

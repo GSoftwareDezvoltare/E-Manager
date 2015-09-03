@@ -22,8 +22,8 @@ import javax.swing.JMenu;
  *
  * @author TechSolutions
  */
-public class AdaugaJucator extends javax.swing.JFrame {
-   Connection connect = DBConnection.getDbCon().connect;
+public class AdaugaJucator extends javax.swing.JFrame{
+    Connection connect = DBConnection.getDbCon().connect;
     PreparedStatement ps = null;
     ResultSet rs = null;
     Jucator jucator = new Jucator(); 

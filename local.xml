@@ -4,5 +4,5 @@
 	<entry key="adresaSQL">jdbc:mysql://localhost:3306/</entry>
 	<entry key="numeBD">aplicatie_licenta</entry>
     <entry key="driverBD">com.mysql.jdbc.Driver</entry>
-	<entry key="username">Ovidiu</entry>
+	<entry key="username">medsoft</entry>
 </properties>

@@ -96,10 +96,10 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setLabelFor(this);
         jLabel1.setBorder(javax.swing.BorderFactory.createCompoundBorder());
         jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jLabel1.setFocusable(false);
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jLabel1.setInheritsPopupMenu(false);
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jLabel1.getAccessibleContext().setAccessibleName("E-Management - Login");
 
         getAccessibleContext().setAccessibleDescription("");
 

@@ -5,11 +5,8 @@
  */
 package clase;
 
-import MainSiLogin.Login;
-import java.awt.JobAttributes;
-import java.io.File;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import NewInterface.MainMeniu2;
+import javax.swing.JFrame;
 /**
  *
  * @author TechSolutions
@@ -21,8 +18,12 @@ public class AplicatieSuportPentruManagerulJucatorilor {
      */
     public static void main(String[] args) {
         
-          Login lgin = new Login();
-          lgin.setVisible(true);
+//          Login lgin = new Login();
+//          lgin.setVisible(true);
+        
+        MainMeniu2 mn = new MainMeniu2();
+        mn.setExtendedState(mn.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+        mn.setVisible(true);
         
     }
     
